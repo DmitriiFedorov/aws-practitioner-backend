@@ -1,15 +1,15 @@
 "use strict";
 
-const { products } = require("./mocks/index");
+import { products } from "./mocks/index.js";
 
-module.exports.getProductsList = async () => {
+export const getProductsList = async () => {
   return {
     statusCode: 200,
     body: JSON.stringify(products),
   };
 };
 
-module.exports.getProductsById = async (event) => {
+export const getProductsById = async (event) => {
   const querystring = event.queryStringParameters;
   const productId = querystring?.productId ?? "";
 
