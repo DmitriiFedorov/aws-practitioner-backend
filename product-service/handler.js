@@ -10,8 +10,8 @@ export const getProductsList = async () => {
 };
 
 export const getProductsById = async (event) => {
-  const querystring = event.queryStringParameters;
-  const productId = querystring?.productId ?? "";
+  const pathParameters = event.pathParameters;
+  const productId = pathParameters?.productId ?? "";
 
   if (!productId) {
     return {
