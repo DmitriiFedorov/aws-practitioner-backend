@@ -2,6 +2,14 @@ service: product-service
 
 frameworkVersion: "3"
 
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+custom:
+  esbuild:
+    target: 'node14'
+
 provider:
   name: aws
   runtime: nodejs14.x

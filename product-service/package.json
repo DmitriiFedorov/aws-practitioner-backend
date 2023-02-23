@@ -2,12 +2,16 @@
   "name": "product-service",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "sls offline"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.16.17",
+    "serverless-esbuild": "^1.39.0",
+    "serverless-offline": "^12.0.4"
+  }
 }

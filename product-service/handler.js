@@ -1,6 +1,6 @@
 "use strict";
 
-import { products } from "./mocks/index.js";
+import { products } from "./mocks/index";
 
 export const getProductsList = async () => {
   return {
