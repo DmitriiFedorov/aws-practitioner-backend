@@ -4,7 +4,8 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "start": "sls offline"
+    "start": "sls offline",
+    "generateApi": "sls openapi generate -o doc/openapi/openapi.json -f json"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +14,9 @@
     "esbuild": "^0.16.17",
     "serverless-esbuild": "^1.39.0",
     "serverless-offline": "^12.0.4"
+  },
+  "dependencies": {
+    "serverless-openapi-documentation-v2": "^0.4.6",
+    "serverless-s3-sync": "^3.1.0"
   }
 }

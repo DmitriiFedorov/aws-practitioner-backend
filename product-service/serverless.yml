@@ -5,10 +5,18 @@ frameworkVersion: "3"
 plugins:
   - serverless-esbuild
   - serverless-offline
+  - serverless-s3-sync
+  - serverless-openapi-documentation-v2
 
 custom:
   esbuild:
-    target: 'node14'
+    target: "node14"
+  documentation: ${file(serverless.doc.yml):documentation.custom}
+  openapiBucket: product-service-openapi-bucket
+  s3Sync:
+    - bucketName: ${self:custom.openapiBucket}
+      localDir: doc/openapi
+      acl: public-read
 
 provider:
   name: aws
@@ -17,19 +25,31 @@ provider:
   stage: dev
   region: eu-west-1
 
-  httpApi:
-    cors: true
-
 functions:
   getProductsList:
     handler: handler.getProductsList
     events:
-      - httpApi:
-          path: /products
+      - http:
+          path: products
           method: get
+          cors: true
+          documentation: ${file(serverless.doc.yml):documentation.endpoints.getProductsList}
   getProductsById:
     handler: handler.getProductsById
     events:
-      - httpApi:
-          path: /products/{productId}
+      - http:
+          path: products/{productId}
           method: get
+          cors: true
+          documentation: ${file(serverless.doc.yml):documentation.endpoints.getProductsById}
+
+resources:
+  Resources:
+    OpenAPIBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.openapiBucket}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html
