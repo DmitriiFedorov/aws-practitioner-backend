@@ -1,6 +1,6 @@
-import { getProductsById, getProductsList } from "./handler";
+import { getProductsById } from "./index";
 
-jest.mock("./mocks/index", () => ({
+jest.mock("../../mocks", () => ({
   products: [
     {
       description: "Test Product Description",
@@ -10,22 +10,6 @@ jest.mock("./mocks/index", () => ({
     },
   ],
 }));
-
-describe("handler getProductsList", () => {
-  it("should return correct result", async () => {
-    const { statusCode, body } = await getProductsList();
-
-    expect(statusCode).toBe(200);
-    expect(JSON.parse(body)).toEqual([
-      {
-        description: "Test Product Description",
-        id: "testId",
-        price: 24,
-        title: "Test Product",
-      },
-    ]);
-  });
-});
 
 describe("handler getProductsById", () => {
   it("should return correct result if correct id provided", async () => {

@@ -1,12 +1,8 @@
-"use strict";
+import { products } from "../../mocks";
 
-import { products } from "./mocks/index";
-
-export const getProductsList = async () => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(products),
-  };
+const NOT_FOUND_RESPONSE = {
+  statusCode: 404,
+  body: "Not found",
 };
 
 export const getProductsById = async (event) => {
@@ -14,10 +10,7 @@ export const getProductsById = async (event) => {
   const productId = pathParameters?.productId ?? "";
 
   if (!productId) {
-    return {
-      statusCode: 404,
-      body: "Not found",
-    };
+    return NOT_FOUND_RESPONSE;
   }
 
   const product = products.find((prod) => prod.id === productId);
@@ -29,8 +22,5 @@ export const getProductsById = async (event) => {
     };
   }
 
-  return {
-    statusCode: 404,
-    body: "Not found",
-  };
+  return NOT_FOUND_RESPONSE;
 };

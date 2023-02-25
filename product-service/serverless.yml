@@ -27,7 +27,7 @@ provider:
 
 functions:
   getProductsList:
-    handler: handler.getProductsList
+    handler: handlers/getProductsList/index.getProductsList
     events:
       - http:
           path: products
@@ -35,7 +35,7 @@ functions:
           cors: true
           documentation: ${file(serverless.doc.yml):documentation.endpoints.getProductsList}
   getProductsById:
-    handler: handler.getProductsById
+    handler: handlers/getProductsById/index.getProductsById
     events:
       - http:
           path: products/{productId}

@@ -17,6 +17,12 @@ documentation:
           items:
             type: "object"
             properties: ${file(./doc/models/Product.json):properties}
+      - name: "NotFound"
+        description: "Not Found"
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: "object"
+          properties:
+            body: "Not Found"
   endpoints:
     getProductsList:
       summary: "Request a list of available products"
@@ -41,3 +47,8 @@ documentation:
             description: "Product"
           responseModels:
             application/json: "Product"
+        - statusCode: 404
+          responseBody:
+            description: "Not Found"
+          responseModels:
+            application/json: "NotFound"
