@@ -1,7 +1,15 @@
 import { products } from "../../mocks";
 
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Credentials": true,
+};
+
 const NOT_FOUND_RESPONSE = {
   statusCode: 404,
+  headers: {
+    ...CORS_HEADERS,
+  },
   body: JSON.stringify({ error: "Not found" }),
 };
 
@@ -18,6 +26,9 @@ export const getProductsById = async (event) => {
   if (product) {
     return {
       statusCode: 200,
+      headers: {
+        ...CORS_HEADERS,
+      },
       body: JSON.stringify(product),
     };
   }
