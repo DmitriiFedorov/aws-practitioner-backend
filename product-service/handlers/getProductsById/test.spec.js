@@ -40,6 +40,6 @@ describe("handler getProductsById", () => {
     const { statusCode, body } = await getProductsById(event);
 
     expect(statusCode).toBe(404);
-    expect(body).toEqual("Not found");
+    expect(JSON.parse(body)).toEqual({ error: "Not found" });
   });
 });

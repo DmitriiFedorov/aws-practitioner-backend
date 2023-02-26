@@ -2,7 +2,7 @@ import { products } from "../../mocks";
 
 const NOT_FOUND_RESPONSE = {
   statusCode: 404,
-  body: "Not found",
+  body: JSON.stringify({ error: "Not found" }),
 };
 
 export const getProductsById = async (event) => {

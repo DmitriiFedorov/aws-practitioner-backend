@@ -19,10 +19,15 @@ documentation:
             properties: ${file(./doc/models/Product.json):properties}
       - name: "NotFound"
         description: "Not Found"
+        contentType: "application/json"
+        schema:
           $schema: "http://json-schema.org/draft-04/schema#"
+          title: "Not Found"
           type: "object"
           properties:
-            body: "Not Found"
+            error:
+              type: "string"
+              description: "Error description"
   endpoints:
     getProductsList:
       summary: "Request a list of available products"

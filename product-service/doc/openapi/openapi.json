@@ -49,6 +49,16 @@
             }
           }
         }
+      },
+      "NotFound": {
+        "title": "Not Found",
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error description"
+          }
+        }
       }
     },
     "securitySchemes": {}
@@ -83,7 +93,7 @@
     "/products/{productId}": {
       "get": {
         "operationId": "getProductsById",
-        "summary": "Request a products",
+        "summary": "Request a product",
         "description": "Response with a product with specified id",
         "parameters": [
           {
@@ -103,6 +113,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFound"
                 }
               }
             }
