@@ -1,0 +1,156 @@
+[
+  {
+    "id": {
+      "S": "ef08f8cc-5360-4cf3-86a7-58524b16cb7c"
+    },
+    "description": {
+      "S": "A decade-by-decade cookbook that highlights the best (and a few of the worst) baking recipes from the 20th century"
+    },
+    "price": {
+      "N": "32"
+    },
+    "title": {
+      "S": "Baking Yesteryear: The Best Recipes from the 1900s to the 1980s"
+    }
+  },
+  {
+    "id": {
+      "S": "01c11f1b-6b67-455d-9105-e2c94bc0566f"
+    },
+    "description": {
+      "S": "In twenty-one bite-sized lessons, Yuval Noah Harari explores what it means to be human in an age of bewilderment."
+    },
+    "price": {
+      "N": "11"
+    },
+    "title": {
+      "S": "21 Lessons for the 21st Century"
+    }
+  },
+  {
+    "id": {
+      "S": "8224c0e8-7777-4f93-8fc5-5f9c8d08b203"
+    },
+    "description": {
+      "S": "Read Costa Award-winning author Christie Watson's incredible No. 1 Sunday Times bestselling memoir of nursing today."
+    },
+    "price": {
+      "N": "9"
+    },
+    "title": {
+      "S": "Language of Kindness"
+    }
+  },
+  {
+    "id": {
+      "S": "630017d1-0c7e-44a6-b61b-789d2a1780bb"
+    },
+    "description": {
+      "S": "Let the magic of J.K. Rowling's classic Harry Potter series take you back to Hogwarts School of Witchcraft and Wizardry. "
+    },
+    "price": {
+      "N": "9"
+    },
+    "title": {
+      "S": "Harry Potter and the Goblet of Fire"
+    }
+  },
+  {
+    "id": {
+      "S": "ea1b5cf5-c3fe-4ff6-9c04-ba4018582a89"
+    },
+    "description": {
+      "S": "From the bestselling historian Norman Stone, whose work has been described by Andrew Roberts as 'stunning ... no one else quite writes history like he does'."
+    },
+    "price": {
+      "N": "11"
+    },
+    "title": {
+      "S": "Turkey"
+    }
+  },
+  {
+    "id": {
+      "S": "873e4691-1d9f-447a-8982-85088fde479b"
+    },
+    "description": {
+      "S": "Mr Jones of Manor Farm is so lazy and drunken that one day he forgets to feed his livestock. The ensuing rebellion under the leadership of the pigs Napoleon and Snowball leads to the animals taking over the farm. Vowing to eliminate the terrible inequities of the farmyard, the renamed Animal Farm is organised to benefit all who walk on four legs."
+    },
+    "price": {
+      "N": "9"
+    },
+    "title": {
+      "S": "Animal Farm"
+    }
+  },
+  {
+    "id": {
+      "S": "96ce75f3-4749-401b-b07c-d8fa768e8590"
+    },
+    "description": {
+      "S": "A profoundly insightful and helpful book on the power of habit from the world's leading expert."
+    },
+    "price": {
+      "N": "10"
+    },
+    "title": {
+      "S": "Good Habits, Bad Habits"
+    }
+  },
+  {
+    "id": {
+      "S": "273664cd-7816-4d01-8e03-7959affd1aaf"
+    },
+    "description": {
+      "S": "From the multi-award-winning and million-copy bestselling author of This is Going to Hurt, comes Twas The Nightshift Before Christmas, a gift book that alternates between the hilarious and the heartbreaking, in a love letter to all those who spend their festive season on the front line."
+    },
+    "price": {
+      "N": "10"
+    },
+    "title": {
+      "S": "Twas The Nightshift Before Christmas"
+    }
+  },
+  {
+    "id": {
+      "S": "938f8ca0-e2a2-4703-8ea6-d8e19f0064ed"
+    },
+    "description": {
+      "S": "The #1 New York Times bestseller is now a major Netflix film starring Kiernan Shipka, Shameik Moore, Odeya Rush and Isabela Moner."
+    },
+    "price": {
+      "N": "8"
+    },
+    "title": {
+      "S": "Let It Snow"
+    }
+  },
+  {
+    "id": {
+      "S": "5f5b34c5-6532-4820-b123-a75b55f7caa5"
+    },
+    "description": {
+      "S": "The Sunday Times Bestseller. Winner of the Parliamentary Book Awards"
+    },
+    "price": {
+      "N": "11"
+    },
+    "title": {
+      "S": "How To Be Right"
+    }
+  },
+  {
+    "id": {
+      "S": "4f49bd99-77ff-47a8-93b5-bf975c0e54bf"
+    },
+    "description": {
+      "S": "A worthy successor to Michael Porter, Growth IQ contains the ten strategies to sustainable growth based on a purpose-led culture for organizations of any size."
+    },
+    "price": {
+      "N": "11"
+    },
+    "title": {
+      "S": "Growth IQ"
+    }
+  }
+]
