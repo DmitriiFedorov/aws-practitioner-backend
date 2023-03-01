@@ -19,6 +19,11 @@
             "type": "integer",
             "minimum": 0
           },
+          "count": {
+            "description": "Product's stock count",
+            "type": "integer",
+            "minimum": 0
+          },
           "title": {
             "type": "string",
             "description": "Product's title"
@@ -40,6 +45,11 @@
             },
             "price": {
               "description": "Product's price",
+              "type": "integer",
+              "minimum": 0
+            },
+            "count": {
+              "description": "Product's stock count",
               "type": "integer",
               "minimum": 0
             },
