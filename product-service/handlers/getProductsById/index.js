@@ -1,4 +1,6 @@
-import { products } from "../../mocks";
+import AWS from "aws-sdk";
+
+const dynamo = new AWS.DynamoDB.DocumentClient();
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -21,17 +23,37 @@ export const getProductsById = async (event) => {
     return NOT_FOUND_RESPONSE;
   }
 
-  const product = products.find((prod) => prod.id === productId);
+  try {
+    const productQuery = await dynamo
+      .query({
+        TableName: process.env.PRODUCTS_TABLE_NAME,
+        KeyConditionExpression: "id = :id",
+        ExpressionAttributeValues: { ":id": productId },
+      })
+      .promise();
 
-  if (product) {
+    const product = productQuery.Items[0];
+
+    if (product) {
+      return {
+        statusCode: 200,
+        headers: {
+          ...CORS_HEADERS,
+        },
+        body: JSON.stringify(product),
+      };
+    }
+
+    return NOT_FOUND_RESPONSE;
+  } catch (error) {
+    console.log(error);
+
     return {
-      statusCode: 200,
+      statusCode: error?.code || error?.statusCode || 500,
       headers: {
         ...CORS_HEADERS,
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify({ error: error?.message ?? "Something went wrong" }),
     };
   }
-
-  return NOT_FOUND_RESPONSE;
 };

@@ -25,6 +25,10 @@ provider:
   stage: dev
   region: eu-west-1
 
+  environment:
+    PRODUCTS_TABLE_NAME: AWS_Practitioner_Products
+    STOCKS_TABLE_NAME: AWS_Practitioner_Stocks
+
 functions:
   getProductsList:
     handler: handlers/getProductsList/index.getProductsList
