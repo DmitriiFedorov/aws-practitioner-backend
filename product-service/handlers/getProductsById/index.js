@@ -1,5 +1,7 @@
 import AWS from "aws-sdk";
 
+import { logger } from "../../services/Logger";
+
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
 const CORS_HEADERS = {
@@ -19,7 +21,11 @@ export const getProductsById = async (event) => {
   const pathParameters = event.pathParameters;
   const productId = pathParameters?.productId ?? "";
 
+  logger.info("START getProductsById");
+  logger.info(JSON.stringify({ productId }));
+
   if (!productId) {
+    logger.info("FINISH FAIL getProductsById");
     return NOT_FOUND_RESPONSE;
   }
 
@@ -35,6 +41,7 @@ export const getProductsById = async (event) => {
     const product = productQuery.Items[0];
 
     if (product) {
+      logger.info("FINISH SUCCESS getProductsById");
       return {
         statusCode: 200,
         headers: {
@@ -44,9 +51,10 @@ export const getProductsById = async (event) => {
       };
     }
 
+    logger.info("FINISH FAIL getProductsById");
     return NOT_FOUND_RESPONSE;
   } catch (error) {
-    console.log(error);
+    logger.error(error);
 
     return {
       statusCode: error?.code || error?.statusCode || 500,

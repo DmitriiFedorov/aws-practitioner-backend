@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import { randomUUID } from "crypto";
 
+import { logger } from "../../services/Logger";
 import { validateCreateProductBody } from "../../validators";
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
@@ -11,7 +12,11 @@ const CORS_HEADERS = {
 };
 
 export const createProduct = async (event) => {
+  logger.info("START createProduct");
+
   const { body } = event;
+
+  logger.info(JSON.stringify({ body }));
 
   const { error, value } = validateCreateProductBody(JSON.parse(body));
 
@@ -43,6 +48,7 @@ export const createProduct = async (event) => {
       })
       .promise();
 
+    logger.info("FINISH SUCCESS createProduct");
     return {
       statusCode: 201,
       headers: {
@@ -51,6 +57,7 @@ export const createProduct = async (event) => {
       body: JSON.stringify(productQuery),
     };
   } catch (error) {
+    logger.error(error);
     return {
       statusCode: error?.code || error?.statusCode || 500,
       headers: {
