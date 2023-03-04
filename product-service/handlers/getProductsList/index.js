@@ -28,7 +28,6 @@ export const getProductsList = async () => {
       body: JSON.stringify(productsWithCount ?? []),
     };
   } catch (error) {
-    console.log(error);
     return {
       statusCode: 500,
       body: JSON.stringify({

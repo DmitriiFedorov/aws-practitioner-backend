@@ -8,6 +8,10 @@ documentation:
         description: "The shape of a Product"
         contentType: "application/json"
         schema: ${file(./doc/models/Product.json)}
+      - name: "CreateProductRequestBody"
+        description: "The shape of a new Product"
+        contentType: "application/json"
+        schema: ${file(./doc/models/CreateProductRequestBody.json)}
       - name: "ProductsList"
         description: "A list of available Products"
         contentType: "application/json"
@@ -23,6 +27,17 @@ documentation:
         schema:
           $schema: "http://json-schema.org/draft-04/schema#"
           title: "Not Found"
+          type: "object"
+          properties:
+            error:
+              type: "string"
+              description: "Error description"
+      - name: "BadRequest"
+        description: "Bad Request"
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          title: "Bad Request"
           type: "object"
           properties:
             error:
@@ -57,3 +72,21 @@ documentation:
             description: "Not Found"
           responseModels:
             application/json: "NotFound"
+    createProduct:
+      summary: "Create a product"
+      description: "Save new product to the database"
+      requestBody:
+        description: "A new product"
+      requestModels:
+        application/json: CreateProductRequestBody
+      methodResponses:
+        - statusCode: 201
+          responseBody:
+            description: "A product that was added to the database"
+          responseModels:
+            application/json: "Product"
+        - statusCode: 400
+          responseBody:
+            description: "Bad request"
+          responseModels:
+            application/json: "BadRequest"
