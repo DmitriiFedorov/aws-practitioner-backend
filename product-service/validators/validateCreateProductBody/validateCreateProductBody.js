@@ -2,11 +2,17 @@ const validateCreateProductBody = (requestBody) => {
   const description = requestBody.description;
   const price = requestBody.price;
   const title = requestBody.title;
+  const count = requestBody.count;
 
   let error = undefined;
   let value = undefined;
 
-  if (description === undefined || price === undefined || title === undefined) {
+  if (
+    typeof description === "undefined" ||
+    typeof price === "undefined" ||
+    typeof title === "undefined" ||
+    typeof count === "undefined"
+  ) {
     error = true;
   }
 
@@ -27,6 +33,7 @@ const validateCreateProductBody = (requestBody) => {
       description,
       title,
       price,
+      count,
     };
   }
 

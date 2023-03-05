@@ -22,7 +22,7 @@ export const getProductsById = async (event) => {
   const productId = pathParameters?.productId ?? "";
 
   logger.info("START getProductsById");
-  logger.info(JSON.stringify({ productId }));
+  logger.info(`Product id - ${productId}`);
 
   if (!productId) {
     logger.info("FINISH FAIL getProductsById");
@@ -30,29 +30,43 @@ export const getProductsById = async (event) => {
   }
 
   try {
-    const productQuery = await dynamo
-      .query({
-        TableName: process.env.PRODUCTS_TABLE_NAME,
-        KeyConditionExpression: "id = :id",
-        ExpressionAttributeValues: { ":id": productId },
-      })
-      .promise();
+    const productQuery = dynamo.query({
+      TableName: process.env.PRODUCTS_TABLE_NAME,
+      KeyConditionExpression: "id = :id",
+      ExpressionAttributeValues: { ":id": productId },
+    });
+    const stockQuery = dynamo.query({
+      TableName: process.env.STOCKS_TABLE_NAME,
+      KeyConditionExpression: "product_id = :product_id",
+      ExpressionAttributeValues: { ":product_id": productId },
+    });
 
-    const product = productQuery.Items[0];
+    const [productResult, stockResult] = await Promise.all([
+      productQuery.promise(),
+      stockQuery.promise(),
+    ]);
 
-    if (product) {
-      logger.info("FINISH SUCCESS getProductsById");
-      return {
-        statusCode: 200,
-        headers: {
-          ...CORS_HEADERS,
-        },
-        body: JSON.stringify(product),
-      };
+    const isEmptySearchResult =
+      productResult.Count === 0 || stockResult.Count === 0;
+
+    if (isEmptySearchResult) {
+      logger.info("FINISH FAIL getProductsById");
+      return NOT_FOUND_RESPONSE;
     }
 
-    logger.info("FINISH FAIL getProductsById");
-    return NOT_FOUND_RESPONSE;
+    const product = {
+      ...productResult.Items[0],
+      count: stockResult.Items[0].count,
+    };
+
+    logger.info("FINISH SUCCESS getProductsById");
+    return {
+      statusCode: 200,
+      headers: {
+        ...CORS_HEADERS,
+      },
+      body: JSON.stringify(product),
+    };
   } catch (error) {
     logger.error(error);
 
