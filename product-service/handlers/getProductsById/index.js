@@ -1,8 +1,5 @@
-import AWS from "aws-sdk";
-
 import { logger } from "../../services/Logger";
-
-const dynamo = new AWS.DynamoDB.DocumentClient();
+import { getProduct } from "../../services/dynamoDB";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -30,34 +27,12 @@ export const getProductsById = async (event) => {
   }
 
   try {
-    const productQuery = dynamo.query({
-      TableName: process.env.PRODUCTS_TABLE_NAME,
-      KeyConditionExpression: "id = :id",
-      ExpressionAttributeValues: { ":id": productId },
-    });
-    const stockQuery = dynamo.query({
-      TableName: process.env.STOCKS_TABLE_NAME,
-      KeyConditionExpression: "product_id = :product_id",
-      ExpressionAttributeValues: { ":product_id": productId },
-    });
+    const { error, product } = await getProduct(productId);
 
-    const [productResult, stockResult] = await Promise.all([
-      productQuery.promise(),
-      stockQuery.promise(),
-    ]);
-
-    const isEmptySearchResult =
-      productResult.Count === 0 || stockResult.Count === 0;
-
-    if (isEmptySearchResult) {
+    if (error) {
       logger.info("FINISH FAIL getProductsById");
       return NOT_FOUND_RESPONSE;
     }
-
-    const product = {
-      ...productResult.Items[0],
-      count: stockResult.Items[0].count,
-    };
 
     logger.info("FINISH SUCCESS getProductsById");
     return {

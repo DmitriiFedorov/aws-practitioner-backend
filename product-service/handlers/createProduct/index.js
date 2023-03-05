@@ -1,10 +1,9 @@
-import AWS from "aws-sdk";
 import { randomUUID } from "crypto";
 
 import { logger } from "../../services/Logger";
 import { validateCreateProductBody } from "../../validators";
+import { createProductTransaction } from "../../services/dynamoDB";
 
-const dynamo = new AWS.DynamoDB.DocumentClient();
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -37,27 +36,13 @@ export const createProduct = async (event) => {
     const { description, title, price, count } = value;
     const id = randomUUID();
 
-    const newProductTableItem = { title, description, price, id };
-    const newStockTableItem = { product_id: id, count };
-
-    await dynamo
-      .transactWrite({
-        TransactItems: [
-          {
-            Put: {
-              TableName: process.env.PRODUCTS_TABLE_NAME,
-              Item: newProductTableItem,
-            },
-          },
-          {
-            Put: {
-              TableName: process.env.STOCKS_TABLE_NAME,
-              Item: newStockTableItem,
-            },
-          },
-        ],
-      })
-      .promise();
+    await createProductTransaction({
+      title,
+      description,
+      price,
+      count,
+      id,
+    });
 
     logger.info("FINISH SUCCESS createProduct");
     return {
