@@ -40,39 +40,24 @@ export const createProduct = async (event) => {
     const newProductTableItem = { title, description, price, id };
     const newStockTableItem = { product_id: id, count };
 
-    const productPut = dynamo.put({
-      TableName: process.env.PRODUCTS_TABLE_NAME,
-      Item: newProductTableItem,
-    });
-
-    const stockPut = dynamo.put({
-      TableName: process.env.STOCKS_TABLE_NAME,
-      Item: newStockTableItem,
-    });
-
-    await Promise.all([productPut.promise(), stockPut.promise()]);
-
-    const productQuery = dynamo.query({
-      TableName: process.env.PRODUCTS_TABLE_NAME,
-      KeyConditionExpression: "id = :id",
-      ExpressionAttributeValues: { ":id": id },
-    });
-
-    const stockQuery = dynamo.query({
-      TableName: process.env.STOCKS_TABLE_NAME,
-      KeyConditionExpression: "product_id = :product_id",
-      ExpressionAttributeValues: { ":product_id": id },
-    });
-
-    const [productResult, stockResult] = await Promise.all([
-      productQuery.promise(),
-      stockQuery.promise(),
-    ]);
-
-    const product = {
-      ...productResult.Items[0],
-      count: stockResult.Items[0].count,
-    };
+    await dynamo
+      .transactWrite({
+        TransactItems: [
+          {
+            Put: {
+              TableName: process.env.PRODUCTS_TABLE_NAME,
+              Item: newProductTableItem,
+            },
+          },
+          {
+            Put: {
+              TableName: process.env.STOCKS_TABLE_NAME,
+              Item: newStockTableItem,
+            },
+          },
+        ],
+      })
+      .promise();
 
     logger.info("FINISH SUCCESS createProduct");
     return {
@@ -80,7 +65,7 @@ export const createProduct = async (event) => {
       headers: {
         ...CORS_HEADERS,
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify({ status: "Success" }),
     };
   } catch (error) {
     logger.error(error);
