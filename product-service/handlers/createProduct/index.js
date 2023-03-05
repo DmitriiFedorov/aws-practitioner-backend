@@ -3,12 +3,11 @@ import { randomUUID } from "crypto";
 import { logger } from "../../services/Logger";
 import { validateCreateProductBody } from "../../validators";
 import { createProductTransaction } from "../../services/dynamoDB";
-
-
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Credentials": true,
-};
+import {
+  CORS_HEADERS,
+  BAD_REQUEST,
+  SUCCESS_CREATED,
+} from "../../constants/http";
 
 export const createProduct = async (event) => {
   try {
@@ -24,13 +23,7 @@ export const createProduct = async (event) => {
     const { error, value } = validateCreateProductBody(parsedBody);
 
     if (error) {
-      return {
-        statusCode: 400,
-        headers: {
-          ...CORS_HEADERS,
-        },
-        body: JSON.stringify({ error: "Bad request" }),
-      };
+      return BAD_REQUEST;
     }
 
     const { description, title, price, count } = value;
@@ -45,13 +38,7 @@ export const createProduct = async (event) => {
     });
 
     logger.info("FINISH SUCCESS createProduct");
-    return {
-      statusCode: 201,
-      headers: {
-        ...CORS_HEADERS,
-      },
-      body: JSON.stringify({ status: "Success" }),
-    };
+    return SUCCESS_CREATED;
   } catch (error) {
     logger.error(error);
     return {

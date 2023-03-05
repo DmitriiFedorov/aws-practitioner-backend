@@ -1,18 +1,10 @@
 import { logger } from "../../services/Logger";
 import { getProduct } from "../../services/dynamoDB";
-
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Credentials": true,
-};
-
-const NOT_FOUND_RESPONSE = {
-  statusCode: 404,
-  headers: {
-    ...CORS_HEADERS,
-  },
-  body: JSON.stringify({ error: "Not found" }),
-};
+import {
+  CORS_HEADERS,
+  NOT_FOUND_RESPONSE,
+  SUCCESS_REQUEST,
+} from "../../constants/http";
 
 export const getProductsById = async (event) => {
   const pathParameters = event.pathParameters;
@@ -36,10 +28,7 @@ export const getProductsById = async (event) => {
 
     logger.info("FINISH SUCCESS getProductsById");
     return {
-      statusCode: 200,
-      headers: {
-        ...CORS_HEADERS,
-      },
+      ...SUCCESS_REQUEST,
       body: JSON.stringify(product),
     };
   } catch (error) {
