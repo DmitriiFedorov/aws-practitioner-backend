@@ -25,6 +25,18 @@ provider:
   stage: dev
   region: eu-west-1
 
+  environment:
+    PRODUCTS_TABLE_NAME: AWS_Practitioner_Products
+    STOCKS_TABLE_NAME: AWS_Practitioner_Stocks
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:*"
+      Resource:
+        - "arn:aws:dynamodb:eu-west-1:508529194395:table/${self:provider.environment.PRODUCTS_TABLE_NAME}"
+        - "arn:aws:dynamodb:eu-west-1:508529194395:table/${self:provider.environment.STOCKS_TABLE_NAME}"
+
 functions:
   getProductsList:
     handler: handlers/getProductsList/index.getProductsList
@@ -42,6 +54,14 @@ functions:
           method: get
           cors: true
           documentation: ${file(serverless.doc.yml):documentation.endpoints.getProductsById}
+  createProduct:
+    handler: handlers/createProduct/index.createProduct
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+          documentation: ${file(serverless.doc.yml):documentation.endpoints.createProduct}
 
 resources:
   Resources:

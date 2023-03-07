@@ -19,6 +19,30 @@
             "type": "integer",
             "minimum": 0
           },
+          "count": {
+            "description": "Product's stock count",
+            "type": "integer",
+            "minimum": 0
+          },
+          "title": {
+            "type": "string",
+            "description": "Product's title"
+          }
+        }
+      },
+      "CreateProductRequestBody": {
+        "title": "CreateProductRequestBody",
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Short description"
+          },
+          "price": {
+            "description": "Product's price",
+            "type": "integer",
+            "minimum": 0
+          },
           "title": {
             "type": "string",
             "description": "Product's title"
@@ -43,6 +67,11 @@
               "type": "integer",
               "minimum": 0
             },
+            "count": {
+              "description": "Product's stock count",
+              "type": "integer",
+              "minimum": 0
+            },
             "title": {
               "type": "string",
               "description": "Product's title"
@@ -52,6 +81,16 @@
       },
       "NotFound": {
         "title": "Not Found",
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error description"
+          }
+        }
+      },
+      "BadRequest": {
+        "title": "Bad Request",
         "type": "object",
         "properties": {
           "error": {
@@ -83,6 +122,44 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProductsList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createProduct",
+        "summary": "Create a product",
+        "description": "Save new product to the database",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductRequestBody"
+              }
+            }
+          },
+          "description": "A new product"
+        },
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "A product that was added to the database",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequest"
                 }
               }
             }
