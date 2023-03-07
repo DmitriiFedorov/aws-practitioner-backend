@@ -1,0 +1,55 @@
+service: product-service
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+  - serverless-s3-sync
+  - serverless-openapi-documentation-v2
+
+custom:
+  esbuild:
+    target: "node14"
+  documentation: ${file(serverless.doc.yml):documentation.custom}
+  openapiBucket: product-service-openapi-bucket
+  s3Sync:
+    - bucketName: ${self:custom.openapiBucket}
+      localDir: doc/openapi
+      acl: public-read
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+  stage: dev
+  region: eu-west-1
+
+functions:
+  getProductsList:
+    handler: handlers/getProductsList/index.getProductsList
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+          documentation: ${file(serverless.doc.yml):documentation.endpoints.getProductsList}
+  getProductsById:
+    handler: handlers/getProductsById/index.getProductsById
+    events:
+      - http:
+          path: products/{productId}
+          method: get
+          cors: true
+          documentation: ${file(serverless.doc.yml):documentation.endpoints.getProductsById}
+
+resources:
+  Resources:
+    OpenAPIBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.openapiBucket}
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+          ErrorDocument: index.html

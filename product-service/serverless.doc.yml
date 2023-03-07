@@ -1,0 +1,59 @@
+documentation:
+  custom:
+    version: "1.0.0"
+    title: "Products service"
+    description: "Products endpoints and response types"
+    models:
+      - name: "Product"
+        description: "The shape of a Product"
+        contentType: "application/json"
+        schema: ${file(./doc/models/Product.json)}
+      - name: "ProductsList"
+        description: "A list of available Products"
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          type: "array"
+          items:
+            type: "object"
+            properties: ${file(./doc/models/Product.json):properties}
+      - name: "NotFound"
+        description: "Not Found"
+        contentType: "application/json"
+        schema:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          title: "Not Found"
+          type: "object"
+          properties:
+            error:
+              type: "string"
+              description: "Error description"
+  endpoints:
+    getProductsList:
+      summary: "Request a list of available products"
+      description: "Response with a list of available products"
+      methodResponses:
+        - statusCode: 200
+          responseBody:
+            description: "A list of available products"
+          responseModels:
+            application/json: "ProductsList"
+    getProductsById:
+      summary: "Request a product"
+      description: "Response with a product with specified id"
+      pathParams:
+        - name: "productId"
+          description: "The id for a requested product"
+          schema:
+            type: "string"
+      methodResponses:
+        - statusCode: 200
+          responseBody:
+            description: "Product"
+          responseModels:
+            application/json: "Product"
+        - statusCode: 404
+          responseBody:
+            description: "Not Found"
+          responseModels:
+            application/json: "NotFound"

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Product",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "Short description"
+    },
+    "id": {
+      "type": "string",
+      "description": "Product's unique id"
+    },
+    "price": {
+      "description": "Product's price",
+      "type": "integer",
+      "minimum": 0
+    },
+    "title": {
+      "type": "string",
+      "description": "Product's title"
+    }
+  }
+}
