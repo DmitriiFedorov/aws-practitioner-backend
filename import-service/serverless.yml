@@ -1,0 +1,46 @@
+service: import-service
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: eu-west-1
+
+  environment:
+    BUCKET: backend-import-service-bucket
+    REGION: ${self:provider.region}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource:
+        - "arn:aws:s3:::${self:provider.environment.BUCKET}"
+        - "arn:aws:s3:::${self:provider.environment.BUCKET}/*"
+
+plugins:
+  - serverless-offline
+
+functions:
+  importProductsFile:
+    handler: handlers/importProductsFile/index.importProductsFile
+    events:
+      - http:
+          path: import
+          method: get
+          cors: true
+          request:
+            parameters:
+              querystrings:
+                name: true
+  importFileParser:
+    handler: handlers/importFileParser/index.importFileParser
+    events:
+      - s3:
+          bucket: ${self:provider.environment.BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
