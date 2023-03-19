@@ -11,6 +11,7 @@ provider:
   environment:
     BUCKET: backend-import-service-bucket
     REGION: ${self:provider.region}
+    SQS_URL: https://sqs.eu-west-1.amazonaws.com/508529194395/catalogItemsQueue
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -19,6 +20,11 @@ provider:
       Resource:
         - "arn:aws:s3:::${self:provider.environment.BUCKET}"
         - "arn:aws:s3:::${self:provider.environment.BUCKET}/*"
+    - Effect: "Allow"
+      Action:
+        - "sqs:*"
+      Resource:
+        - "arn:aws:sqs:eu-west-1:508529194395:catalogItemsQueue"
 
 plugins:
   - serverless-offline
