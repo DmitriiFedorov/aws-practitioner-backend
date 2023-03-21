@@ -28,6 +28,11 @@ provider:
   environment:
     PRODUCTS_TABLE_NAME: AWS_Practitioner_Products
     STOCKS_TABLE_NAME: AWS_Practitioner_Stocks
+    REGION: ${self:provider.region}
+    SQS_URL:
+      Ref: SQSQueue
+    SNS_ARN:
+      Ref: SNSTopic
 
   iamRoleStatements:
     - Effect: "Allow"
@@ -36,6 +41,16 @@ provider:
       Resource:
         - "arn:aws:dynamodb:eu-west-1:508529194395:table/${self:provider.environment.PRODUCTS_TABLE_NAME}"
         - "arn:aws:dynamodb:eu-west-1:508529194395:table/${self:provider.environment.STOCKS_TABLE_NAME}"
+    - Effect: "Allow"
+      Action:
+        - "sqs:*"
+      Resource:
+        - Fn::GetAtt: [SQSQueue, Arn]
+    - Effect: "Allow"
+      Action:
+        - "sns:*"
+      Resource:
+        Ref: SNSTopic
 
 functions:
   getProductsList:
@@ -62,6 +77,15 @@ functions:
           method: post
           cors: true
           documentation: ${file(serverless.doc.yml):documentation.endpoints.createProduct}
+  catalogBatchProcess:
+    handler: handlers/catalogBatchProcess/index.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn
 
 resources:
   Resources:
@@ -73,3 +97,28 @@ resources:
         WebsiteConfiguration:
           IndexDocument: index.html
           ErrorDocument: index.html
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: dmitry_fedorov1@epam.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+    SNSSubscriptionWithFilterPolicy:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: dmitriifedoroff1@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy:
+          productsAdded:
+           - moreThanOne

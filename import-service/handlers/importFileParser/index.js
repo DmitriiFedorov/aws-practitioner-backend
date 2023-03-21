@@ -4,26 +4,34 @@ import {
   DeleteObjectCommand,
   CopyObjectCommand,
 } from "@aws-sdk/client-s3";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import cvs from "csv-parser";
 
 export const importFileParser = async (event) => {
   try {
     const region = process.env.REGION;
     const bucket = process.env.BUCKET;
-    const client = new S3Client({ region });
+    const sqsUrl = process.env.SQS_URL;
+    const s3Client = new S3Client({ region });
+    const sqsClient = new SQSClient({ region });
 
-    for await (const record of event.Records) {
+    for (const record of event.Records) {
       const key = record.s3.object.key;
       const getCommand = new GetObjectCommand({ Bucket: bucket, Key: key });
-      const response = await client.send(getCommand);
+      const response = await s3Client.send(getCommand);
+      const sqsCommands = [];
 
-      console.log("A CVS file parse start");
       await new Promise((resolve, reject) => {
         response.Body.pipe(cvs())
-          .on("data", (data) => console.log(data))
+          .on("data", (data) => {
+            sqsCommands.push(
+              new SendMessageCommand({
+                MessageBody: JSON.stringify(data),
+                QueueUrl: sqsUrl,
+              })
+            );
+          })
           .on("end", async () => {
-            console.log("The file stream has ended");
-
             const fileName = key.split("/")[1];
 
             const copyCommand = new CopyObjectCommand({
@@ -34,7 +42,7 @@ export const importFileParser = async (event) => {
 
             try {
               console.log("The file started moving to the 'parsed/' folder");
-              await client.send(copyCommand);
+              await s3Client.send(copyCommand);
               console.log("File moved to the 'parsed/' folder");
 
               const deleteCommand = new DeleteObjectCommand({
@@ -45,7 +53,7 @@ export const importFileParser = async (event) => {
               console.log(
                 "A copy of the file has begun to be removed from the 'uploaded/' folder"
               );
-              await client.send(deleteCommand);
+              await s3Client.send(deleteCommand);
               console.log(
                 "The copy of the file has been removed from the 'uploaded/' folder"
               );
@@ -56,6 +64,8 @@ export const importFileParser = async (event) => {
             resolve();
           });
       });
+
+      await Promise.all(sqsCommands.map((command) => sqsClient.send(command)));
 
       return {
         statusCode: 200,
