@@ -1,0 +1,19 @@
+service: authorization-service
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-dotenv-plugin
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-west-1
+  environment:
+    DmitriiFedorov: ${env:DmitriiFedorov}
+
+functions:
+  basicAuthorizer:
+    handler: handlers/basicAuthorizer/index.basicAuthorizer
