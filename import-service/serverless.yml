@@ -43,7 +43,7 @@ functions:
                 name: true
           authorizer:
             arn: arn:aws:lambda:eu-west-1:508529194395:function:authorization-service-dev-basicAuthorizer
-            type: 'token'
+            type: "token"
   importFileParser:
     handler: handlers/importFileParser/index.importFileParser
     events:
@@ -53,3 +53,15 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: "AWS::ApiGateway::GatewayResponse"
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: "ApiGatewayRestApi"

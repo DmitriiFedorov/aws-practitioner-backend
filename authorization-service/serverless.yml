@@ -17,3 +17,5 @@ provider:
 functions:
   basicAuthorizer:
     handler: handlers/basicAuthorizer/index.basicAuthorizer
+    url:
+      cors: true
